@@ -94,5 +94,53 @@ B3 --> C9[資料備份與匯出]
 
 ## 使用案例圖
 
+```mermaid
+%% 使用案例圖：課表與成績管理系統
+%% 可直接貼入 GitHub README 顯示
+%% 主角：使用者（User）
+
+graph TD
+    actor(使用者)
+    
+    subgraph UC1[使用案例 1：管理課表]
+        UC1A[新增課程]
+        UC1B[編輯課程]
+        UC1C[刪除課程]
+        UC1D[檢查課程時間重疊]
+        UC1E[更新並儲存課表]
+    end
+
+    subgraph UC2[使用案例 2：輸入與查詢成績]
+        UC2A[輸入成績]
+        UC2B[自動計算平均分數]
+        UC2C[格式錯誤提示]
+        UC2D[儲存並顯示成績]
+    end
+
+    subgraph UC3[使用案例 3：接收上課提醒]
+        UC3A[設定提醒時間]
+        UC3B[發送上課通知]
+        UC3C[課程修改後自動更新提醒]
+    end
+
+    %% 使用者與使用案例關係
+    actor --> UC1A
+    actor --> UC1B
+    actor --> UC1C
+    actor --> UC2A
+    actor --> UC2B
+    actor --> UC3A
+
+    %% 案例內部流程連線
+    UC1A --> UC1D
+    UC1B --> UC1D
+    UC1D --> UC1E
+
+    UC2A --> UC2B --> UC2D
+    UC2A --> UC2C
+
+    UC3A --> UC3B
+    UC3B --> UC3C
+
 
 
