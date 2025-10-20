@@ -102,7 +102,7 @@ B3 --> C9[資料備份與匯出]
 graph TD
     actor(使用者)
     
-    subgraph UC1[使用案例 1：管理課表]
+    subgraph UC1[管理課表]
         UC1A[新增課程]
         UC1B[編輯課程]
         UC1C[刪除課程]
@@ -110,14 +110,14 @@ graph TD
         UC1E[更新並儲存課表]
     end
 
-    subgraph UC2[使用案例 2：輸入與查詢成績]
+    subgraph UC2[輸入與查詢成績]
         UC2A[輸入成績]
         UC2B[自動計算平均分數]
         UC2C[格式錯誤提示]
         UC2D[儲存並顯示成績]
     end
 
-    subgraph UC3[使用案例 3：接收上課提醒]
+    subgraph UC3[接收上課提醒]
         UC3A[設定提醒時間]
         UC3B[發送上課通知]
         UC3C[課程修改後自動更新提醒]
