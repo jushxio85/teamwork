@@ -204,6 +204,8 @@ sequenceDiagram
         後端API-->>前端介面: 最新課表
         前端介面-->>使用者: 顯示課表
     end
+```
+```mermaid
 flowchart LR
     A[開始] --> B[輸入課程資料]
     B --> C{時間是否重疊?}
@@ -240,6 +242,8 @@ sequenceDiagram
         後端API-->>前端介面: 顯示結果
         前端介面-->>使用者: 成績與平均
     end
+```
+```mermaid
 flowchart LR
     A[開始] --> B[輸入成績]
     B --> C{格式有效?}
@@ -269,6 +273,8 @@ sequenceDiagram
     提醒模組->>通知: 發送提醒(訊息, 時間)
     通知-->>使用者: 推播/通知
     note over 提醒模組,DB: 若課程被修改 → 下次排程時重新計算
+```
+```mermaid
 flowchart LR
     A[開始(排程觸發)] --> B[讀取課表與提醒設定]
     B --> C{有即將開始的課程?}
