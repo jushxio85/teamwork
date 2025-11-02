@@ -1,14 +1,3 @@
-# 課課到，分分算｜UML 圖集（類別圖＋循序圖＋活動圖）
-
-> 依 `README.md`、`hw3.md`、`dfd.md` 整理。圖表以 **最必要資訊** 呈現，內容為繁體中文；活動圖皆為 **橫向** 版面。
-
----
-
-## 一、UML 類別圖（Class Diagram）
-
-### Mermaid 版本（可直接貼到 GitHub 顯示）
-
-```mermaid
 classDiagram
     direction LR
 
@@ -67,8 +56,12 @@ classDiagram
       +發送提醒(u:使用者, 提醒)
     }
 
-    class 通知服務 <<external>>
-    class 登入驗證系統 <<external>>
+    class 通知服務
+    class 登入驗證系統
+
+    %% 樣式：外部系統以灰底表示
+    classDef external fill:#eee,stroke:#999,color:#333
+    class 通知服務,登入驗證系統 external
 
     使用者 "1" o-- "1" 課表 : 擁有
     課表 *-- "0..*" 課程 : 包含
@@ -85,19 +78,33 @@ classDiagram
     提醒服務 --> 通知服務 : 發送
 
     使用者 --> 登入驗證系統 : 驗證
-```
 
-### PlantUML 版本
-
-```plantuml
 @startuml
+skinparam classFontName 微軟正黑體
+skinparam shadowing false
 left to right direction
 
-class 使用者 {
-  +使用者ID: UUID
-  +姓名: string
-  +email: string
-  +登入()
+' === 核心系統（模組視角） ===
+class 課課到系統 as System {
+  +系統名稱: string
+  +版本: string
+  +啟動()
+}
+
+class 課表管理模組 as ScheduleModule
+class 成績管理模組 as GradeModule
+class 提醒排程模組 as ReminderModule
+class 視覺化模組 as VisualizationModule
+
+System *-- ScheduleModule : 包含
+System *-- GradeModule : 包含
+System *-- ReminderModule : 包含
+System *-- VisualizationModule : 包含
+
+' === 實體/資料類別 ===
+class 課表 {
+  +課表ID: UUID
+  +學期: string
 }
 class 課程 {
   +課程ID: UUID
@@ -106,69 +113,44 @@ class 課程 {
   +地點: string
   +老師: string
 }
-class 課表 {
-  +課表ID: UUID
-  +學期: string
-}
 class 成績 {
   +成績ID: UUID
   +分數: float
   +權重: float
-  +學期: string
-}
-class 提醒設定 {
-  +提前分鐘: int
-  +啟用: bool
 }
 class 提醒 {
   +提醒ID: UUID
   +時間: datetime
   +訊息: string
-  +狀態: enum
 }
-class 課表服務 {
-  +新增課程(u:使用者, c:課程)
-  +編輯課程(c:課程)
-  +刪除課程(c:課程)
+class 使用者 {
+  +使用者ID: UUID
+  +姓名: string
+  +email: string
 }
-class 成績服務 {
-  +記錄成績(u:使用者, c:課程, 分數, 權重)
-  +計算平均(u:使用者): float
-}
-class 提醒服務 {
-  +建立排程(課表, 提醒設定)
-  +發送提醒(u:使用者, 提醒)
-}
+
+' === 外部系統 ===
 class 通知服務 <<external>>
 class 登入驗證系統 <<external>>
 
-使用者 "1" o-- "1" 課表 : 擁有
-課表 *-- "0..*" 課程 : 包含
-使用者 "1" o-- "0..*" 成績 : 產生
-課程 "1" o-- "0..*" 成績 : 對應
-使用者 "1" o-- "1" 提醒設定 : 設定
-使用者 "1" o-- "0..*" 提醒 : 接收
+' === 模組與資料/外部互動 ===
+ScheduleModule *-- 課表 : 包含
+課表 *-- 課程 : 包含
+GradeModule --> 成績 : 使用
+GradeModule --> 課程 : 參照
+ReminderModule --> 提醒 : 產生
+ReminderModule ..> 通知服務 : 發送
+VisualizationModule --> 成績 : 讀取
+VisualizationModule --> 課程 : 讀取
 
-課表服務 --> 課表
-課表服務 --> 課程
-成績服務 --> 成績
-成績服務 --> 課程
-提醒服務 --> 提醒
-提醒服務 --> 通知服務 : 發送
+使用者 --> 登入驗證系統 : 登入/驗證
+使用者 --> ScheduleModule : 管理課程
+使用者 --> GradeModule : 輸入成績
+使用者 --> ReminderModule : 設定提醒
+使用者 --> VisualizationModule : 檢視圖表
 
-使用者 --> 登入驗證系統 : 驗證
 @enduml
-```
 
----
-
-## 二、使用案例與循序圖／活動圖
-
-### UC001：管理課表
-
-**循序圖（Mermaid）**
-
-```mermaid
 sequenceDiagram
     autonumber
     actor 使用者
@@ -194,11 +176,6 @@ sequenceDiagram
         後端-->>前端: 回傳最新課表
         前端-->>使用者: 顯示課表
     end
-```
-
-**活動圖（Mermaid，橫向）**
-
-```mermaid
 flowchart LR
     A[開始] --> B[輸入課程資料]
     B --> C{時間是否重疊?}
@@ -207,15 +184,7 @@ flowchart LR
     E --> F[回傳最新課表]
     F --> G[結束]
     D --> B
-```
 
----
-
-### UC002：輸入與查詢成績
-
-**循序圖（Mermaid）**
-
-```mermaid
 sequenceDiagram
     autonumber
     actor 使用者
@@ -241,11 +210,6 @@ sequenceDiagram
         後端-->>前端: 回傳結果
         前端-->>使用者: 顯示成績與平均
     end
-```
-
-**活動圖（Mermaid，橫向）**
-
-```mermaid
 flowchart LR
     A[開始] --> B[輸入成績]
     B --> C{格式有效?}
@@ -256,15 +220,7 @@ flowchart LR
     G --> H[顯示結果]
     H --> I[結束]
     D --> B
-```
 
----
-
-### UC003：接收上課提醒
-
-**循序圖（Mermaid）**
-
-```mermaid
 sequenceDiagram
     autonumber
     participant 排程器 as 提醒排程
@@ -280,11 +236,6 @@ sequenceDiagram
     提醒服務->>通知: 發送提醒(訊息, 時間)
     通知-->>使用者: 推播/通知
     note over 提醒服務,DB: 若課程被修改 → 下次排程時重新計算
-```
-
-**活動圖（Mermaid，橫向）**
-
-```mermaid
 flowchart LR
     A[開始(排程觸發)] --> B[讀取課表與提醒設定]
     B --> C{有即將開始的課程?}
@@ -294,11 +245,3 @@ flowchart LR
     E --> F{發送成功?}
     F -- 否 --> G[記錄失敗並重試排程]
     F -- 是 --> H[結束]
-```
-
----
-
-### 備註
-
-* 類別與關聯依你實作的資料表（如 `student / course / grade / schedule`）抽象化而成；若你提供實際欄位名稱，我可以將類別圖的屬性命名與多重性（例如 1..*、0..1）精確化。
-* 若需要 **.puml / .md / .png** 匯出版本，告訴我要的格式，我會一次整理好。
