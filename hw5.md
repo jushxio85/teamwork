@@ -173,6 +173,97 @@ VisualizationModule "1" --> "1" Dashboard : 使用
 VisualizationModule --> Chart : 生成
 Chart "1" --> "*" DataPoint : 包含
 
+sequenceDiagram
+    actor 使用者
+    participant 前端介面
+    participant 後端API
+    participant 課表模組 as ScheduleModule
+    participant DB as 資料庫
+
+    使用者->>前端介面: 新增/編輯/刪除課程
+    前端介面->>後端API: /api/schedule (課程資料)
+    後端API->>課表模組: 驗證與處理(課程資料)
+    課表模組->>DB: 讀取現有課表
+    DB-->>課表模組: 課表/課程清單
+    課表模組->>課表模組: 檢查時間重疊
+    alt 時間重疊
+        課表模組-->>後端API: 錯誤(時間衝突)
+        後端API-->>前端介面: 422 Unprocessable
+        前端介面-->>使用者: 提示：課程時間重疊
+    else 無重疊
+        課表模組->>DB: 寫入課程異動
+        DB-->>課表模組: OK
+        課表模組-->>後端API: 更新後課表
+        後端API-->>前端介面: 最新課表
+        前端介面-->>使用者: 顯示課表
+    end
+flowchart LR
+    A[開始] --> B[輸入課程資料]
+    B --> C{時間是否重疊?}
+    C -- 是 --> D[提示並返回編修]
+    C -- 否 --> E[更新資料庫]
+    E --> F[回傳最新課表]
+    F --> G[結束]
+    D --> B
+sequenceDiagram
+    actor 使用者
+    participant 前端介面
+    participant 後端API
+    participant 成績模組 as GradeModule
+    participant DB as 資料庫
+
+    使用者->>前端介面: 輸入成績(分數、權重)
+    前端介面->>後端API: /api/grades (成績資料)
+    後端API->>成績模組: 驗證與寫入
+    alt 格式錯誤
+        成績模組-->>後端API: 錯誤(格式不正確)
+        後端API-->>前端介面: 400 Bad Request
+        前端介面-->>使用者: 提示重新輸入
+    else 格式正確
+        成績模組->>DB: 儲存成績
+        DB-->>成績模組: OK
+        成績模組->>DB: 查詢所有成績
+        DB-->>成績模組: 成績清單
+        成績模組->>成績模組: 計算總平均/加權平均
+        成績模組-->>後端API: 成績與平均
+        後端API-->>前端介面: 顯示結果
+        前端介面-->>使用者: 成績與平均
+    end
+flowchart LR
+    A[開始] --> B[輸入成績]
+    B --> C{格式有效?}
+    C -- 否 --> D[提示錯誤並重填]
+    C -- 是 --> E[寫入資料庫]
+    E --> F[讀取所有成績]
+    F --> G[計算平均]
+    G --> H[顯示結果]
+    H --> I[結束]
+    D --> B
+sequenceDiagram
+    autonumber
+    participant 排程器 as 提醒排程
+    participant 提醒模組 as ReminderModule
+    participant DB as 資料庫
+    participant 通知 as 通知服務
+    actor 使用者
+
+    排程器->>提醒模組: 觸發(分鐘/時段)
+    提醒模組->>DB: 讀取課表與提醒設定
+    DB-->>提醒模組: 課程清單/設定
+    提醒模組->>提醒模組: 生成今日提醒
+    提醒模組->>通知: 發送提醒(訊息, 時間)
+    通知-->>使用者: 推播/通知
+    note over 提醒模組,DB: 若課程被修改 → 下次排程時重新計算
+flowchart LR
+    A[開始(排程觸發)] --> B[讀取課表與提醒設定]
+    B --> C{有即將開始的課程?}
+    C -- 否 --> H[結束]
+    C -- 是 --> D[生成提醒內容]
+    D --> E[呼叫通知服務發送]
+    E --> F{發送成功?}
+    F -- 否 --> G[記錄失敗並重試]
+    F -- 是 --> H[結束]
+
 ExportModule "1" --> "*" OutputFile : 產生
 ExportModule --> ScheduleModule : 讀取課表
 ExportModule --> GradeModule : 讀取成績
