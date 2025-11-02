@@ -273,6 +273,7 @@ sequenceDiagram
     提醒模組->>通知: 發送提醒(訊息, 時間)
     通知-->>使用者: 推播/通知
     note over 提醒模組,DB: 若課程被修改 → 下次排程時重新計算
+    end
 ```
 ```mermaid
 flowchart LR
