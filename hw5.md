@@ -1,3 +1,5 @@
+##校園小工具系統：課課到，分分算
+
 ```mermaid
     classDiagram
     %% ========== 主系統類別 ==========
@@ -179,6 +181,12 @@
     ExportModule --> GradeModule : 讀取成績
     ExportModule --> VisualizationModule : 讀取統計
 ```
+
+# 循序圖與活動圖
+
+## 使用案例 1：管理課表
+
+### 循序圖 (Sequence Diagram)
 ```mermaid
 sequenceDiagram
     actor 使用者
@@ -205,6 +213,9 @@ sequenceDiagram
         前端介面-->>使用者: 顯示課表
     end
 ```
+
+### 活動圖 (Activity Diagram)
+
 ```mermaid
 flowchart LR
     A[開始] --> B[輸入課程資料]
@@ -216,6 +227,10 @@ flowchart LR
     D --> B
 
 ```
+## 使用案例 2：輸入與查詢成績
+
+### 循序圖 (Sequence Diagram)
+
 
 ```mermaid
 sequenceDiagram
@@ -243,6 +258,8 @@ sequenceDiagram
         前端介面-->>使用者: 成績與平均
     end
 ```
+### 活動圖 (Activity Diagram)
+
 ```mermaid
 flowchart LR
     A[開始] --> B[輸入成績]
@@ -256,6 +273,9 @@ flowchart LR
     D --> B
 
 ```
+## 使用案例 3：接收上課提醒
+
+### 循序圖 (Sequence Diagram)
 
 ```mermaid
 sequenceDiagram
@@ -274,6 +294,7 @@ sequenceDiagram
     通知-->>使用者: 推播/通知
     note over 提醒模組,DB: 若課程被修改 → 下次排程時重新計算
 ```
+### 活動圖 (Activity Diagram)
 
 ```mermaid
     
