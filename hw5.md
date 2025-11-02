@@ -214,6 +214,7 @@ flowchart LR
     D --> B
 
 ```
+
 ```mermaid
 sequenceDiagram
     actor 使用者
@@ -251,6 +252,7 @@ flowchart LR
     D --> B
 
 ```
+
 ```mermaid
 sequenceDiagram
     autonumber
