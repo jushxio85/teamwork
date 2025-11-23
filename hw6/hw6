@@ -18,7 +18,7 @@
 
 # 📘 螢幕一：登入畫面（Login）
 
-![螢幕一：登入畫面](hw6/hw6_screen1_login.png)
+![螢幕一：登入畫面](hw6_screen1_login.png)
 
 ### 📝 功能說明
 - 提供 Email + 密碼登入  
@@ -32,7 +32,7 @@
 
 # 📘 螢幕二：今日概覽
 
-![螢幕二：首頁](images/hw6_screen2_home.png)
+![螢幕二：首頁](hw6_screen2_home.png)
 
 ### 📝 功能說明
 - 顯示今日課程、提醒、日期  
@@ -46,7 +46,7 @@
 
 # 📘 螢幕三：成績總覽與平均計算
 
-![螢幕三：成績總覽](images/hw6_screen6_grade_overview.png)
+![螢幕三：成績總覽](hw6_screen6_grade_overview.png)
 
 ### 📝 功能說明
 - 顯示學期內所有課程成績  
@@ -60,7 +60,7 @@
 
 # 📘 螢幕四：提醒設定畫面
 
-![螢幕四：提醒設定](images/hw6_screen7_reminder_settings.png)
+![螢幕四：提醒設定](hw6_screen7_reminder_settings.png)
 
 ### 📝 功能說明
 - 設定上課前提醒  
@@ -75,7 +75,7 @@
 
 # 📘 螢幕五：成績報表列印預覽
 
-![螢幕五：成績報表列印預覽](images/hw6_screen8_report_preview.png)
+![螢幕五：成績報表列印預覽](hw6_screen8_report_preview.png)
 
 ### 📝 功能說明
 - 可預覽完整的學期成績報表  
