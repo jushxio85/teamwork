@@ -1,7 +1,7 @@
 # Storyboard 分鏡板
 
 ## 畫面 1：登入畫面
-![登入畫面](images/screen1_login.png)
+![登入畫面](images/hw6_screen1_login.png)
 
 ## 畫面 2：首頁
 ![首頁](images/screen2_home.png)
