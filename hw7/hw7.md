@@ -1,1 +1,1 @@
-![ERD 圖](picture.png)
+![ERD圖](picture.png)
